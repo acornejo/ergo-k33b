@@ -1,0 +1,63 @@
+(rules PCB main_board 
+  (snap_angle 
+    fortyfive_degree
+  )
+  (autoroute_settings
+    (fanout off)
+    (autoroute on)
+    (postroute on)
+    (vias on)
+    (via_costs 200)
+    (plane_via_costs 5)
+    (start_ripup_costs 100)
+    (start_pass_no 1)
+    (default_preferred_direction_trace_cost 1.0)
+    (default_undesired_direction_trace_cost 2.5)
+    (layer_rule F.Cu
+      (active on)
+      (preferred_direction vertical)
+    )
+    (layer_rule B.Cu
+      (active on)
+      (preferred_direction horizontal)
+    )
+  )
+  (rule
+    (width 150.0)
+    (clearance 200.1)
+    (clearance 75.0 (type smd_to_turn_gap))
+    (clearance 75.0 (type pad_to_turn_gap))
+    (clearance 50.0 (type smd))
+    (clearance 200.0 (type "power_ground"))
+  )
+
+  (class default
+    (clearance_class default)
+    (via_rule default)
+    (rule
+      (width 150.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class "kicad_default"
+    (rule
+      (width 150.0)
+      (clearance 200.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class "power_ground"
+    RAW GND VCC "BAT_P" "JST_1" "JST_2"
+    (rule
+      (width 250.0)
+      (clearance 200.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+)

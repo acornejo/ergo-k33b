@@ -1,0 +1,11 @@
+{
+    "scripts": {
+        "postinstall": "git submodule update --init --recursive --remote",
+        "build": "rm -fR output/; npx ergogen ./ergogen/ --clear && for i in output/cases/*.jscad; do npx @jscad/cli \"$i\" -of stla -o \"${i%.jscad}.stl\"; done",
+        "clean": "rm -fR output/"
+    },
+    "dependencies": {
+        "@jscad/cli": "^1.10.0",
+        "ergogen": "^4.2.0"
+    }
+}

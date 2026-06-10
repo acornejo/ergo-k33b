@@ -1,0 +1,490 @@
+meta:
+  engine: 4.2.0
+  name: ergo-k33b
+  version: 0.1
+  ref: &kb_ref "ErgoK33b v0.1"
+  author: hastyrobot
+  url: &kb_url https://github.com/acornejo/ergo-k33b
+
+units:
+  # Proxy Spacing Variables
+  kx: u
+  ky: u 
+  # Padding Variables
+  px: kx + 4
+  py: ky + 4
+  # key cutout hole size
+  kcow: 14
+  kcoh: 14
+
+   # Physical measures
+  screw_radius: 1.1 # M2 screws
+  screw_diameter: screw_radius * 2
+  screw_head_radius: 2.05
+  screw_head_diameter: screw_head_radius * 2
+  spacer_radius: 2.15 # M2 standoffs
+  spacer_diameter: spacer_radius * 2
+
+  # case variables
+  case_wall_thickness: 1.2
+  pcb_to_case_wall_tolerance: 0.25
+
+points:
+  zones:
+    # 6 x 4 matrix layout
+    matrixkeys:
+      # Fix placement on KiCAD sheet.
+      anchor:
+        shift: [100, -100]
+      columns:
+        # 21, 20, 19, 18, 15, 14
+        outer:
+          key:
+            stagger: 0
+            column_net: P21
+        pinky:
+          key:
+            stagger: 2.5
+            column_net: P20
+        ring:
+          key:
+            stagger: 5
+            column_net: P19
+        middle:
+          key:
+            stagger: 2.5
+            column_net: P18
+        index:
+          key:
+            stagger: -2.5
+            column_net: P15
+        inner:
+          key:
+            stagger: -5
+            column_net: P14
+      rows:
+        bottom:
+          row_net: P10
+        home:
+          row_net: P8
+        top:
+          row_net: P16
+        num:
+          row_net: P7
+    thumbkeys:
+      anchor:
+        ref: matrixkeys_inner_bottom
+        shift: [-kx, -ky-2.5]
+      columns:
+        near:
+          key:
+            column_net: P18
+        home:
+       #   key.splay: -5
+          key:
+            origin: [-11.75, -9]
+            column_net: P15
+        far:
+         # key.splay: -5
+          key:
+            origin: [-9.5, -9]
+            column_net: P14
+      rows:
+        cluster:
+          row_net: P9
+    palmkeys:
+      anchor:
+        ref: matrixkeys_outer_bottom
+        shift: [0, -ky]
+      columns:
+        single:
+          key:
+            column_net: P21
+      rows:
+        cluster:
+          row_net: P9
+    screw_top_outer:
+      key:
+        width: 2
+        height: 2
+        rotate: 45
+      anchor:
+        ref: matrixkeys_outer_num
+        shift: [kx/2, -ky/2+1.25]
+    screw_bottom_outer:
+      key:
+        width: 2
+        height: 2
+        rotate: 45
+      anchor:
+        ref: matrixkeys_outer_bottom
+        shift: [kx/2, -ky/2]
+    screw_top_middle:
+      key:
+        width: 2
+        height: 2
+        rotate: 45
+      anchor:
+        ref: matrixkeys_middle_num
+        shift: [-kx/2, -ky/2-1.25]
+    screw_bottom_middle:
+      key:
+        width: 2
+        height: 2
+        rotate: 45
+      anchor:
+        ref: matrixkeys_middle_bottom
+        shift: [-kx/2, -ky/2-2.5]
+    screw_top_inner:
+      key:
+        width: 2
+        height: 2
+        rotate: 45
+      anchor:
+        ref: matrixkeys_inner_num
+        shift: [kx/2, -ky/2]
+    screw_bottom_inner:
+      key:
+        width: 2
+        height: 2
+        rotate: 45
+      anchor:
+        ref: matrixkeys_inner_bottom
+        shift: [kx/2, -ky/2]
+    mcu:
+      key:
+        width: 18
+        height: 38
+        mirror.skip: true
+        rotate: 15
+      anchor:
+        shift: [36.75,16.5]
+        ref: matrixkeys_inner_num
+    trackpad:
+      key:
+        width: 65
+        height: 50
+        mirror:
+          skip: true
+        rotate: 15
+      anchor:
+        shift: [49.5, -32]
+        ref: matrixkeys_inner_num
+
+
+  rotate: -15
+  mirror:
+    ref: matrixkeys_inner_bottom
+    distance: kx + 90
+
+outlines:
+  keys:
+    - what: rectangle
+      where: /key/
+      bound: false
+      size: [kx-1,ky-1]
+      fillet: 2
+  mcu:
+    - what: rectangle
+      where: /mcu/
+      size: [18, 38]
+  mcu_view:
+    - what: rectangle
+      where: /mcu/
+      size: [18, 7]
+      fillet: 2
+      adjust:
+        shift: [0, -18]
+  trackpad_hole:
+    - what: rectangle
+      where: /mcu/
+      size: [14, 4.5]
+      fillet: 2
+      adjust:
+        shift: [0, -21]
+  trackpad:
+    - what: rectangle
+      where: /trackpad/
+      size: [65, 50]
+      fillet: 2
+  key_cutouts:
+    - what: rectangle
+      where: /key/
+      size: [kcow, kcoh]
+  screws:
+    - what: circle
+      where: /screw/
+      radius: screw_radius
+  spacers:
+    - what: circle
+      where: /screw/
+      radius: spacer_radius
+  board:
+    - what: polygon
+      operation: stack
+      fillet: 4
+      points:
+        - ref: matrixkeys_outer_num
+          shift: [-0.5px,0.5py]
+        - ref: matrixkeys_ring_num
+          shift: [0.4px,0.6py]
+        - ref: matrixkeys_middle_num
+          shift: [0.5px,0.5py]
+        - ref: mirror_matrixkeys_middle_num
+          shift: [0.5px,0.5py]
+        - ref: mirror_matrixkeys_ring_num
+          shift: [0.4px,0.6py]
+        - ref: mirror_matrixkeys_outer_num
+          shift: [-0.5px,0.5py]
+        - ref: mirror_matrixkeys_outer_bottom
+          shift: [-0.5px,-1.35py]
+        - ref: mirror_thumbkeys_far_cluster
+          shift: [0.5px,-0.5py]
+        - ref: thumbkeys_far_cluster
+          shift: [0.5px,-0.5py]
+        - ref: matrixkeys_outer_bottom
+          shift: [-0.5px,-1.35py]
+  case_outer_outline:
+    - what: outline
+      name: board
+      expand: case_wall_thickness + pcb_to_case_wall_tolerance
+      fillet: 0.5
+      joints: 1
+  case_inner_outline:
+    - what: outline
+      name: board
+      expand: pcb_to_case_wall_tolerance
+      fillet: 0.5
+      joints: 1
+  case_walls:
+    - what: outline
+      name: case_outer_outline
+    - what: outline
+      name: case_inner_outline
+      operation: subtract
+  main_board:
+    - what: outline
+      name: board
+    - what: outline
+      name: trackpad_hole
+      operation: subtract
+  frontplate:
+    - what: outline
+      name: board
+    - what: outline
+      name: key_cutouts
+      operation: subtract
+    - what: outline
+      name: screws
+      operation: subtract
+    - what: outline
+      name: mcu_view
+      operation: subtract
+  backplate:
+    - what: outline
+      name: board
+    - what: outline
+      name: screws
+      operation: subtract
+  preview:
+    - what: outline
+      name: board
+    - what: outline
+      name: keys
+      operation: stack
+    - what: outline
+      name: screws
+      operation: stack
+    - what: outline
+      name: mcu_view
+      operation: stack
+    - what: outline
+      name: trackpad_hole
+      operation: stack
+    - what: outline
+      name: trackpad
+      operation: stack
+pcbs:
+  backplate:
+    template: kicad8
+    outlines:
+      main:
+        outline: backplate
+    footprints:
+      m2_screws:
+        what: ceoloide/mounting_hole_npth
+        where: /screw/
+        params:
+          hole_size: screw_diameter
+          hole_drill: screw_diameter
+
+  frontplate:
+    template: kicad8
+    outlines:
+      main:
+        outline: frontplate
+    footprints:
+      m2_screws:
+        what: ceoloide/mounting_hole_npth
+        where: /screw/
+        params:
+          hole_size: screw_diameter
+          hole_drill: screw_diameter
+
+  main_board:
+    template: kicad8
+    outlines:
+      main:
+        outline: main_board
+    footprints:
+      m2_mounts:
+        what: ceoloide/mounting_hole_npth 
+        where: /screw/
+        params:
+          hole_size: screw_diameter
+          hole_drill: screw_diameter
+      switches:
+        what: ceoloide/switch_mx
+        where: /key/
+        params:
+          include_keycap: true
+          solder: true
+          hotswap: true
+          from: "{{column_net}}"
+          to: "{{colrow}}"
+      diodes_left:
+        what: ceoloide/diode_tht_sod123
+        where: /^(?!.*mirror).*key/
+        params:
+          include_tht: true
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+        adjust:
+          rotate: 90
+          shift: [8, -2]
+      diodes_right:
+        what: ceoloide/diode_tht_sod123
+        where: /^mirror.*key/
+        params:
+          include_tht: true
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+        adjust:
+          rotate: 270
+          shift: [-8, -2]
+      mcu:
+        what: ceoloide/mcu_supermini_nrf52840
+        params:
+          side: 'B'
+          #include_extra_pins: "true"
+        where:
+          ref.aggregate.parts: [matrixkeys_inner_num, mirror_matrixkeys_inner_num]
+          shift: [0,8]
+      display:
+        what: ceoloide/display_nice_view
+        where:
+          ref.aggregate.parts: [matrixkeys_inner_num, mirror_matrixkeys_inner_num]
+          shift: [0, 6]
+        params:
+          include_courtyard: false
+          include_silkscreen: true
+          MOSI: P2
+          SCK: P3
+          CS: P1
+      battery_connector:
+        what: ceoloide/battery_connector_molex_pico_ezmate_1x02
+        where:
+          ref.aggregate.parts: [matrixkeys_inner_num, mirror_matrixkeys_inner_num]
+          shift: [20, 15]
+        params:
+          side: 'B'
+      battery_pads:
+        what: infused-kim/pads
+        where:
+          ref.aggregate.parts: [matrixkeys_inner_num, mirror_matrixkeys_inner_num]
+          shift: [25, 15]
+        params:
+          designator: 'BAT_PADS'
+          reverse: false
+          side: 'B'
+          net_1: GND
+          net_2: BAT_P
+          label_1: 'GND'
+          label_2: 'BAT_P'
+          label_at_bottom: true
+      reset_button:
+        what: ceoloide/reset_switch_smd_side
+        where:
+          ref.aggregate.parts: [matrixkeys_inner_num, mirror_matrixkeys_inner_num]
+          shift: [-20, 23]
+        params:
+          side: 'B'
+      power_switch:
+        what: ceoloide/power_switch_smd_side
+        where:
+          ref.aggregate.parts: [matrixkeys_inner_num, mirror_matrixkeys_inner_num]
+          shift: [20, 23]
+          rotate: 90
+        params:
+          side: 'B'
+      trackpad_connector:
+        what: infused-kim/conn_molex_pico_ezmate_1x05
+        where:
+          ref.aggregate.parts: [matrixkeys_inner_num, mirror_matrixkeys_inner_num]
+          shift: [-20, -10]
+        params:
+          designator: 'TPAD'
+          side: 'B'
+          pad_1: P0 # RDY
+          pad_2: GND # GND
+          pad_3: VCC # 3V
+          pad_4: P4 # SCL
+          pad_5: P5 # SDA
+      trackpad_pads:
+        what: infused-kim/pads
+        where:
+          ref.aggregate.parts: [matrixkeys_inner_num, mirror_matrixkeys_inner_num]
+          shift: [-20, -15]
+        params:
+          designator: 'TPAD_PADS'
+          reverse: false
+          side: 'B'
+          pads: 6
+          net_1: P6
+          net_2: P0
+          net_3: GND
+          net_4: VCC
+          net_5: P4
+          net_6: P5
+          label_1: 'RST'
+          label_2: 'RDY'
+          label_3: 'GND'
+          label_4: 'VCC'
+          label_5: 'SCL'
+          label_6: 'SDA'
+          label_at_bottom: true
+cases:
+  frontplate:
+    - what: outline
+      name: frontplate 
+      extrude: 1.5
+  backplate:
+    - what: outline
+      name: backplate 
+      extrude: 1.5
+  bottom_case:
+    - what: outline
+      name: case_walls
+      extrude: 10
+    - what: outline
+      name: case_outer_outline
+      extrude: 2
+      operation: add
+    - what: outline
+      name: spacers
+      extrude: 6
+      operation: add
+    - what: outline
+      name: screws
+      extrude: 6
+      operation: subtract
