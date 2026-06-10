@@ -47,9 +47,14 @@ The board uses a single unified PCB that mirrors the left and right halves — n
 | Trackpad | [Azoteq TPS65](https://www.azoteq.com/) (65mm × 50mm) | Optional; I²C via P4/P5, ready signal P0 |
 | Switches | Cherry MX 5-pin | Hotswap and solder options |
 | Diodes | SOD-123 (SMD) + THT | Both footprints populated; one per key |
-| Battery | JST connector (Molex Pico EZmate 1×2) | Also exposes solder pads (BAT\_P / GND) |
+| Battery connector | Molex Pico EZmate 1×2 | Also exposes BAT\_P / GND solder pads as an alternative |
+| Trackpad connector | Molex Pico EZmate 1×5 | Also exposes RST / RDY / GND / VCC / SCL / SDA solder pads as an alternative |
 | Power switch | SMD side-mount | On the back of the board |
 | Reset button | SMD side-mount | On the back of the board |
+
+### Connector choice
+
+Both the battery and trackpad use [Molex Pico EZmate](https://www.molex.com/en-us/products/connectors/wire-to-board-connectors/pico-ezmate-connectors) connectors rather than the more common JST-PH standard. Pico EZmate has a lower profile (1.48 mm mated height vs. 3.0 mm for JST-PH), which keeps the overall board assembly thinner. Each connector also has corresponding solder pad footprints on the PCB, so you can wire the battery or trackpad directly without a connector if preferred.
 
 ## PCB Design
 
